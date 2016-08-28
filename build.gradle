@@ -1,0 +1,59 @@
+buildscript {
+	ext {
+		springBootVersion = '1.2.7.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+	baseName = 'spring-orm'
+	version =  '0.1.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web"){
+		exclude(group: "org.slf4j",module :"log4j-over-slf4j")
+		exclude(group: "org.slf4j",module :"slf4j-api")
+		exclude(group: "ch.qos.logback",module :"logback-classic")
+		exclude(group: "ch.qos.logback",module :"logback-core")
+	}
+	compile("org.springframework.boot:spring-boot-starter-data-jpa"){
+		exclude(group: "org.slf4j",module :"log4j-over-slf4j")
+		exclude(group: "org.slf4j",module :"slf4j-api")
+		exclude(group: "ch.qos.logback",module :"logback-classic")
+		exclude(group: "ch.qos.logback",module :"logback-core")
+	}
+	compile("org.slf4j:slf4j-log4j12:1.7.12")
+	compile("com.hazelcast:hazelcast-hibernate4:3.6.4")
+	runtime('mysql:mysql-connector-java')
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.3'
+}
+
+bootRun {
+	systemProperties = System.properties
+}
